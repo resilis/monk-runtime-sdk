@@ -17,6 +17,7 @@ type Engine struct {
 	ControlPlane contracts.ControlPlaneReporter
 	EventSink    contracts.EventSink
 	Protocol     contracts.ProtocolEngine
+	Sessions     contracts.SessionManager
 }
 
 func NewEngine(provider contracts.ProviderAdapter, toolExecutor contracts.ToolExecutor, persistence contracts.PersistenceAdapter, controlPlane contracts.ControlPlaneReporter, eventSink contracts.EventSink, protocol contracts.ProtocolEngine) *Engine {
@@ -27,7 +28,23 @@ func NewEngine(provider contracts.ProviderAdapter, toolExecutor contracts.ToolEx
 		ControlPlane: controlPlane,
 		EventSink:    eventSink,
 		Protocol:     protocol,
+		Sessions:     NewSessionManager(provider, toolExecutor),
 	}
+}
+
+func (e *Engine) SessionManager() contracts.SessionManager {
+	if e == nil {
+		return nil
+	}
+	if managed, ok := e.Sessions.(*SessionManager); ok {
+		managed.Provider = e.Provider
+		managed.ToolExecutor = e.ToolExecutor
+		return managed
+	}
+	if e.Sessions == nil {
+		e.Sessions = NewSessionManager(e.Provider, e.ToolExecutor)
+	}
+	return e.Sessions
 }
 
 func (e *Engine) Execute(ctx context.Context, spec contracts.RunSpec) (contracts.RunOutcome, error) {
@@ -38,6 +55,7 @@ func (e *Engine) Execute(ctx context.Context, spec contracts.RunSpec) (contracts
 			false,
 		)
 	}
+	_ = e.SessionManager()
 	if e.Provider == nil {
 		return contracts.RunOutcome{}, contracts.NewRuntimeError(
 			contracts.ErrProtocolViolationCode,

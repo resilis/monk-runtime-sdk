@@ -54,6 +54,8 @@ type SubagentRuntime interface {
 
 type RunSpec struct {
 	RunID                  string
+	SessionID              string
+	SessionKind            SessionKind
 	OrgID                  string
 	UserID                 string
 	AgentName              string
@@ -61,8 +63,10 @@ type RunSpec struct {
 	StrictToolMode         bool
 	MaxToolCalls           int
 	MemoryPolicy           MemoryPolicy
+	ToolPolicy             ToolPolicy
 	SubagentMaxConcurrency int
 	SkillsPayload          map[string]any
+	SessionMetadata        map[string]any
 }
 
 type MemoryPolicy struct {
@@ -79,9 +83,9 @@ type Message struct {
 }
 
 type ProviderRequest struct {
-	RunID         string
-	AgentName     string
-	Messages      []Message
+	RunID          string
+	AgentName      string
+	Messages       []Message
 	StrictToolMode bool
 }
 
@@ -104,11 +108,11 @@ type ToolCall struct {
 }
 
 type ToolResult struct {
-	CallID  string
-	Status  string
-	Result  any
-	Error   string
-	Meta    map[string]any
+	CallID string
+	Status string
+	Result any
+	Error  string
+	Meta   map[string]any
 }
 
 type RuntimeAction struct {
@@ -195,6 +199,8 @@ type SubagentRequest struct {
 	AgentName   string
 	Messages    []Message
 	Policy      MemoryPolicy
+	ToolPolicy  ToolPolicy
+	SessionKind SessionKind
 	Context     map[string]any
 }
 

@@ -9,6 +9,10 @@ const (
 	ErrMemoryIndexCode       = "ERR_MEMORY_INDEX"
 	ErrAgentSchemaCode       = "ERR_AGENT_SCHEMA_INVALID"
 	ErrAdapterPersistCode    = "ERR_ADAPTER_PERSISTENCE"
+	ErrPolicyDeniedCode      = "ERR_POLICY_DENIED"
+	ErrSessionCreateCode     = "ERR_SESSION_CREATE"
+	ErrAgentRegistryCode     = "ERR_AGENT_REGISTRY"
+	ErrToolBackendCode       = "ERR_TOOL_BACKEND"
 )
 
 type RuntimeError struct {

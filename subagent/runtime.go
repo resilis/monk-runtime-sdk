@@ -24,9 +24,9 @@ func (r *Runtime) RunSubagent(ctx context.Context, req contracts.SubagentRequest
 	}
 
 	outcome, err := r.parent.Execute(ctx, contracts.RunSpec{
-		RunID:       req.ParentRunID,
-		AgentName:   req.AgentName,
-		Messages:    req.Messages,
+		RunID:        req.ParentRunID,
+		AgentName:    req.AgentName,
+		Messages:     req.Messages,
 		MemoryPolicy: req.Policy,
 	})
 	if err != nil {
